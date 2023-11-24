@@ -1,3 +1,4 @@
+import java.io.Console;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -21,7 +22,7 @@ public class Pack {
             File file = new File(filePath);
 
             //init a file reader
-            Scanner reader = new Scanner(file);
+            Scanner reader = new Scanner(file); //PROBLEM HERE
 
             // Read each line, and append it to the list.
             ArrayList<Integer> packArray = new ArrayList<Integer>();

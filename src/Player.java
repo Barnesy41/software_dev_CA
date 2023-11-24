@@ -1,11 +1,30 @@
 import java.util.ArrayList;
+import java.util.Random;
 
-public class Player {
-    private int preferredValue;
+public class Player extends Thread {
+    private int playerNum;
     private ArrayList<Card> currentHand = new ArrayList<Card>();
+    private int numTurnsHad=0;
+    private CardDeck discardDeck;
+    private CardDeck pickupDeck;
 
-    public Player (int preferredValue){
-        this.preferredValue = preferredValue;
+    //TODO: Synchronise maybe?
+    @Override
+    public void run() { //Starts running the thread for this player
+        System.out.println("Player " + this.playerNum + ": Thread started");
+        
+        while(!Thread.currentThread().isInterrupted()) {
+            pickupCard();
+            discardCard();
+            numTurnsHad+=1;
+            System.out.println(numTurnsHad);
+        }
+    }
+
+    public Player (int playerNum, CardDeck pickupDeck, CardDeck disCardDeck){
+        this.playerNum = playerNum;
+        this.discardDeck=disCardDeck;
+        this.pickupDeck=pickupDeck;
     }
 
     public void appendToCurrentHand(Card card){
@@ -18,6 +37,38 @@ public class Player {
 
     public ArrayList<Card> getCurrentHand(){
         return currentHand;
+    }
+
+    public synchronized void pickupCard() {
+        System.out.println(currentHand);
+        System.out.println(discardDeck);
+        System.out.println(pickupDeck);
+
+        Card newCard = pickupDeck.popHead();
+        this.appendToCurrentHand(newCard);
+        System.out.println("Player " + (playerNum+1) + " draws a " + newCard.getValue() + " from deck " + pickupDeck.getDeckNumber());
+    }
+
+    public synchronized void discardCard() {
+        System.out.println(currentHand);
+        System.out.println(discardDeck);
+        System.out.println(pickupDeck);
+
+        Card cardToDiscard = null;
+
+        //finds a card that can be discarded (so a card that is not a preferred one)
+        while(cardToDiscard==null) {
+            Random rand = new Random();
+            int int_random = rand.nextInt(4); //TODO: Does this always stay 4? How many cards in a hand
+
+            Card randomCard = currentHand.get(int_random);
+            if (randomCard.getValue() != (playerNum+1)) { //if not a preferred card, the card can be discarded
+                cardToDiscard=randomCard;
+            }
+        }
+
+        discardDeck.pushTail(cardToDiscard);
+        System.out.println("Player " + (playerNum+1) + " discards a " + cardToDiscard.getValue() + " to deck " + discardDeck.getDeckNumber());
     }
 
     /**

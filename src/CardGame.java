@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.util.Scanner; // allows user input
 public class CardGame {
     public static void main(String[] args) {
+        Boolean isWon = false;
+        
         int numPlayers = getNumPlayers();
         String packPath = getPackPath();
 
@@ -20,15 +22,40 @@ public class CardGame {
         //TODO: The preferred value should probably be chosen from the pack, rather than starting from 1 and going up
         ArrayList<Player> playerArray = new ArrayList<Player>();
         ArrayList<CardDeck> cardDeckArray = new ArrayList<CardDeck>();
-        for(int i=1; i<=numPlayers; i++){
-            playerArray.add(new Player(i));
-            cardDeckArray.add(new CardDeck());
+
+        //Generates all the decks
+        for(int i=0; i<=numPlayers; i++) {
+            cardDeckArray.add(new CardDeck(i));
+        }
+
+        //Generates all players and assigns decks to them
+        for(int i=0; i<=numPlayers; i++) {
+            //determines which deck is assigned as player's discard deck
+            int discardDeckNum;
+            if (i==(numPlayers-1)) { //number of discard deck wraps round if final player
+                discardDeckNum=0;
+            }
+            else {
+                discardDeckNum=i+1;
+            }
+
+            playerArray.add(new Player(i, cardDeckArray.get(i), cardDeckArray.get(discardDeckNum)));
+            playerArray.get(i).start(); //This starts running the thread for the player
         }
 
         // Deal the cards
         dealCards(pack, playerArray, cardDeckArray);
 
         // Start the game play cycle
+        while(!isWon) {
+            //each player takes their turn
+            for(int i=1; i<=numPlayers; i++) {
+                
+
+            }
+        }
+
+        
 
     }
 
@@ -49,6 +76,7 @@ public class CardGame {
                 System.out.println("Invalid number of players.\n");
             }
         }
+
         return numPlayers;
     }
 
@@ -63,11 +91,14 @@ public class CardGame {
                 // get the user to input the number of players
                 System.out.println("Please Enter The Path To The Pack To Load:\n");
                 packPath = scanner.nextLine();
+                System.out.println(packPath);
+                System.out.println(packPath.equals(""));
             }
-            catch (Exception e){
+            catch (Exception e) {
                 System.out.println("Invalid Pack Path.\n");
             }
         }
+        System.out.println("got here");
         return packPath;
     }
 
@@ -96,6 +127,4 @@ public class CardGame {
             deckToDealTo.pushTail(card);
         }
     }
-
-
 }
