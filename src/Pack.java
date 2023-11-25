@@ -1,10 +1,9 @@
-import java.io.Console;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Pack {
-    private String filePath;
+    private final String filePath;
 
     public Pack (String filePath){
         this.filePath = filePath;
@@ -38,7 +37,7 @@ public class Pack {
     }
 
     /**
-     * The validatePack file checks whether or not the a file path is a valid pack file
+     * The validatePack file checks whether a file path is to a valid pack file
      *
      * @param numPlayers the number of players playing the game
      *
