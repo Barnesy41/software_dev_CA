@@ -2,11 +2,11 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Player extends Thread {
-    private int playerNum;
+    private final int playerNum;
     private ArrayList<Card> currentHand = new ArrayList<Card>();
     private int numTurnsHad=0;
-    private CardDeck discardDeck;
-    private CardDeck pickupDeck;
+    private final CardDeck discardDeck;
+    private final CardDeck pickupDeck;
 
     //TODO: Synchronise maybe?
     @Override
