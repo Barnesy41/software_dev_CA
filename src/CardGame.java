@@ -24,7 +24,7 @@ public class CardGame {
         ArrayList<CardDeck> cardDeckArray = new ArrayList<CardDeck>();
 
         //Generates all the decks
-        for(int i=0; i<=numPlayers; i++) {
+        for(int i=0; i<numPlayers; i++) {
             cardDeckArray.add(new CardDeck(i));
         }
 
@@ -39,7 +39,7 @@ public class CardGame {
                 discardDeckNum=i+1;
             }
 
-            playerArray.add(new Player(i, cardDeckArray.get(i), cardDeckArray.get(discardDeckNum)));
+            playerArray.add(new Player(i+1, cardDeckArray.get(i), cardDeckArray.get(discardDeckNum)));
             playerArray.get(i).start(); //This starts running the thread for the player
         }
 
@@ -47,14 +47,26 @@ public class CardGame {
         dealCards(pack, playerArray, cardDeckArray);
 
         // Start the game play cycle
+        int numTurns = 0;
+        Player winner=null;
         while(!isWon) {
-            //each player takes their turn
-            for(int i=1; i<=numPlayers; i++) {
-                
+            // Stores which players turn it is
+            int playersTurn = numTurns++ % numPlayers;
+            Player player = playerArray.get(playersTurn);
 
+            // Syncronised for thread safety
+            synchronized (playerArray.get(playersTurn)){
+                player.pickupCard();
+                player.discardCard();
+                System.out.println(player.getCurrentHand());
+            }
+
+            if(player.checkWin()){
+                isWon = true;
+                winner = player;
             }
         }
-
+        System.out.println("player " + winner.getPlayerNum() + " won!\n");
         
 
     }
