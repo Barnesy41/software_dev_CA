@@ -1,12 +1,11 @@
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner; // allows user input
 public class CardGame {
     public static void main(String[] args) {
         Boolean isWon = false;
         
-        int numPlayers = getNumPlayers();
-        String packPath = getPackPath();
+        int numPlayers = inputNumPlayers();
+        String packPath = inputPackPath();
 
         // Instantiate the pack object
         Pack pack = new Pack(packPath);
@@ -14,7 +13,7 @@ public class CardGame {
         // Ensure that the given pack is valid,
         // Otherwise get a valid pack
         while(!pack.validatePack(numPlayers)){
-            packPath = getPackPath();
+            packPath = inputPackPath();
             pack = new Pack(packPath);
         }
 
@@ -58,7 +57,6 @@ public class CardGame {
             synchronized (playerArray.get(playersTurn)){
                 player.pickupCard();
                 player.discardCard();
-                System.out.println(player.getCurrentHand());
             }
 
             if(player.checkWin()){
@@ -71,7 +69,7 @@ public class CardGame {
 
     }
 
-    private static int getNumPlayers(){
+    private static int inputNumPlayers(){
         // init scanner
         Scanner scanner = new Scanner(System.in);
 
@@ -92,7 +90,7 @@ public class CardGame {
         return numPlayers;
     }
 
-    private static String getPackPath(){
+    private static String inputPackPath(){
         // init scanner
         Scanner scanner = new Scanner(System.in);
 
