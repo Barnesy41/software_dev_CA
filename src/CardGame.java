@@ -29,7 +29,7 @@ public class CardGame {
         }
 
         //Generates all players and assigns decks to them
-        for(int i=0; i<=numPlayers; i++) {
+        for(int i=0; i<numPlayers; i++) {
             //determines which deck is assigned as player's discard deck
             int discardDeckNum;
             if (i==(numPlayers-1)) { //number of discard deck wraps round if final player
@@ -91,14 +91,11 @@ public class CardGame {
                 // get the user to input the number of players
                 System.out.println("Please Enter The Path To The Pack To Load:\n");
                 packPath = scanner.nextLine();
-                System.out.println(packPath);
-                System.out.println(packPath.equals(""));
             }
             catch (Exception e) {
                 System.out.println("Invalid Pack Path.\n");
             }
         }
-        System.out.println("got here");
         return packPath;
     }
 
