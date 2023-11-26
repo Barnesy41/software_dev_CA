@@ -4,7 +4,7 @@ import java.util.concurrent.CyclicBarrier;
 
 public class CardGame {
     private final ArrayList<CardDeck> cardDeckArray;
-    private final ArrayList<Player> playerArray;
+    private static ArrayList<Player> playerArray;
     private final int numPlayers;
     private final Pack pack;
     private static ArrayList<Thread> playerThreadArray;
@@ -138,9 +138,40 @@ public class CardGame {
     public static synchronized void setWin(Player winningPlayerObject){
         // ensure that only 1 thread can call this method
         if(!Thread.interrupted()) {
+            // Stop all other threads
             interruptAllPlayerThreads();
-            System.out.println("The winner is player" + winningPlayerObject.getPlayerNum());
+
+            // Output necissary info to the terminal
+            System.out.println("player " + winningPlayerObject.getPlayerNum() + " wins");
             System.out.println("With the hand: " + winningPlayerObject.currentHandToString());
+
+            // inform other players that the winner has won & all of them exit (output to their files)
+            int winnerPlayerNum = winningPlayerObject.getPlayerNum();
+            int playerNum;
+            for (Player player : playerArray){
+                playerNum = player.getPlayerNum();
+
+                // Inform all players if they have won or not
+                if (player != winningPlayerObject) {
+                    player.writeLineToOutputFile(
+                              "player " + winnerPlayerNum +
+                                    " has informed player " + playerNum +
+                                    " that player " + winnerPlayerNum +
+                                    " has won "
+                    );
+                }
+                else player.writeLineToOutputFile("player " + winnerPlayerNum + " wins");
+
+                // Inform all players to exit
+                player.writeLineToOutputFile("player " + playerNum + " exits");
+
+                // Output each player's hand to the output file
+                player.writeFinalHandToOutputFile();
+
+
+            }
+
+
         }
     }
 

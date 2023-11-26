@@ -1,3 +1,7 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.CyclicBarrier;
@@ -8,17 +12,34 @@ public class Player extends Thread {
     private final CardDeck discardDeck;
     private final CardDeck pickupDeck;
     private final CyclicBarrier barrier; // Ensures threads all play the same number of turns by the end of the game
-    private final Object lock;
+    private final File outputFile;
+    private final String outputFilePath;
 
     public Player (int playerNum, CardDeck pickupDeck, CardDeck disCardDeck, CyclicBarrier barrier){
         this.playerNum = playerNum;
         this.discardDeck=disCardDeck;
         this.pickupDeck=pickupDeck;
         this.barrier = barrier;
-        this.lock = new Object();
+        this.outputFilePath = "player" + playerNum + "_output.txt";
+        this.outputFile = new File(outputFilePath);
+
+        // Clear the output file if it already exists
+        try {
+            PrintWriter writer = new PrintWriter(outputFile);
+            writer.print("");
+            writer.close();
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+
     }
 
     public void run(){
+        this.writeLineToOutputFile("player " + playerNum +
+                                    " initial hand " + currentHandToString()
+        );
+
         while(!Thread.interrupted()){
             boolean hasWon = this.checkWin();
 
@@ -30,6 +51,8 @@ public class Player extends Thread {
             else {
                 this.pickupCard();
                 this.discardCard();
+                this.writeCurrentHandToOutputFile();
+
             }
 
             // continue when all other threads have also taken their turns
@@ -60,11 +83,21 @@ public class Player extends Thread {
         return currentHand;
     }
 
+    /**
+     * pickupCard picks up a card from the top of the deck to the left of the player, places it in the players hand,
+     * and outputs a string representation of this to the player's output file
+     */
     public synchronized void pickupCard() {
 
         Card newCard = pickupDeck.popHead();
         this.appendToCurrentHand(newCard);
-        System.out.println("Player " + (playerNum) + " draws a " + newCard.getValue() + " from deck " + pickupDeck.getDeckNumber());
+
+        // Write to the output file
+        writeLineToOutputFile(
+                          "player " + playerNum +
+                                " draws a " + newCard.getValue() +
+                                " from deck " + pickupDeck.getDeckNumber()
+                             );
     }
 
     public synchronized void discardCard() {
@@ -85,6 +118,13 @@ public class Player extends Thread {
         //Send the card to discard to the bottom of the discard deck
         discardDeck.pushTail(cardToDiscard);
         this.removeFromCurrentHand(cardToDiscard); // and discard it from the player's hand
+
+        // Write to the output file
+        writeLineToOutputFile(
+                        "player " + playerNum +
+                              " discards a " + cardToDiscard.getValue() +
+                              " to deck " + discardDeck.getDeckNumber()
+                            );
     }
 
     /**
@@ -108,9 +148,34 @@ public class Player extends Thread {
     public String currentHandToString(){
         String currentHandAsString = "";
         for(Card card : currentHand){
-            currentHandAsString += card.getValue();
+            currentHandAsString += card.getValue() + " ";
         }
 
         return currentHandAsString;
+    }
+
+    public void writeCurrentHandToOutputFile(){
+        writeLineToOutputFile(
+                          "player " + playerNum +
+                                " current hand is " + currentHandToString()
+                             );
+    }
+
+    public void writeFinalHandToOutputFile(){
+        writeLineToOutputFile(
+                "player " + playerNum +
+                        " final hand: " + currentHandToString()
+        );
+    }
+
+    public void writeLineToOutputFile(String string){
+        try {
+            FileWriter writer = new FileWriter(outputFilePath, true);
+            writer.write(string + "\n"); // Add a new line after each write
+            writer.close();
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
     }
 }
