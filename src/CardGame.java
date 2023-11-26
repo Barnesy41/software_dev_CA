@@ -13,8 +13,8 @@ public class CardGame {
         playerThreadArray = new ArrayList<Thread>();
 
         // get required user inputs
-        numPlayers = 4;
-        String packPath = "4players.txt";
+        numPlayers = inputNumPlayers();
+        String packPath = inputPackPath();
 
         // Instantiate the pack object
         Pack inputPack = new Pack(packPath);
