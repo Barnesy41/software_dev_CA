@@ -10,6 +10,11 @@ public class CardDeck {
     private final File outputFile;
     private final String outputFilePath;
 
+    /**
+     * instantiates the CardDeck object: initialises its attributes & creates/clears its output file.
+     *
+     * @param deckNumber the identifier for the deck
+     */
     public CardDeck(int deckNumber) {
         this.deckNumber=deckNumber;
         this.outputFilePath = "deck" + deckNumber + "_output.txt";
@@ -26,6 +31,9 @@ public class CardDeck {
         }
     }
 
+    /**
+     * @return the identifier for the deck
+     */
     public int getDeckNumber() {
         return deckNumber;
     }
@@ -50,6 +58,11 @@ public class CardDeck {
         deck.add(cardObject);
     }
 
+    /**
+     * Returns the contents of a deck as a string
+     * i.e.
+     * deck1 contents: 1 2 3 4
+     */
     @Override
     public String toString() {
         String cardValuesString = "";
@@ -59,6 +72,11 @@ public class CardDeck {
                 " contents:" + cardValuesString;
     }
 
+    /**
+     * Writes a line to the CardDeck's output file
+     *
+     * @param string the string to write to the text file
+     */
     public void writeLineToOutputFile(String string){
         try {
             FileWriter writer = new FileWriter(outputFilePath, true);

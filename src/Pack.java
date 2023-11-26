@@ -5,6 +5,11 @@ import java.util.Scanner;
 public class Pack {
     private final String filePath;
 
+    /**
+     * Instantiates the Pack object
+     *
+     * @param filePath the file location of the pack file
+     */
     public Pack (String filePath){
         this.filePath = filePath;
     }

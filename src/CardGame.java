@@ -69,6 +69,11 @@ public class CardGame {
         }
     }
 
+    /**
+     * asks the user to input the number of players playing the card game & validates said input
+     *
+     * @return the number of players
+     */
     private static int inputNumPlayers(){
         // init scanner
         Scanner scanner = new Scanner(System.in);
@@ -90,6 +95,11 @@ public class CardGame {
         return numPlayers;
     }
 
+    /**
+     * gets the user to input the file location of the pack.
+     *
+     * @return the file location of the pack
+     */
     private static String inputPackPath(){
         // init scanner
         Scanner scanner = new Scanner(System.in);
@@ -135,6 +145,15 @@ public class CardGame {
         }
     }
 
+    /**
+     * Does the necessary details once a player is confirmed to have won the game
+     *
+     * stops all player threads from running
+     * outputs necessary win details to player output files
+     * outputs necessary details to CardDeck output files
+     *
+     * @param winningPlayerObject the Player object of the winning player
+     */
     public static synchronized void setWin(Player winningPlayerObject){
         // ensure that only 1 thread can call this method
         if(!Thread.interrupted()) {
@@ -179,13 +198,16 @@ public class CardGame {
         }
     }
 
+    /**
+     * interrupts the threads of all players, stopping the threads from running.
+     */
+    public static synchronized void interruptAllPlayerThreads(){
+        for(Thread thread : playerThreadArray) thread.interrupt();
+    }
+
     public static void main(String[] args) {
         new CardGame(); // Yes this is needed, despite it not looking like it should be
 
-    }
-
-    public static synchronized void interruptAllPlayerThreads(){
-        for(Thread thread : playerThreadArray) thread.interrupt();
     }
 
 }
