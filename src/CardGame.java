@@ -3,7 +3,7 @@ import java.util.Scanner; // allows user input
 import java.util.concurrent.CyclicBarrier;
 
 public class CardGame {
-    private final ArrayList<CardDeck> cardDeckArray;
+    private static ArrayList<CardDeck> cardDeckArray;
     private static ArrayList<Player> playerArray;
     private final int numPlayers;
     private final Pack pack;
@@ -168,7 +168,11 @@ public class CardGame {
                 // Output each player's hand to the output file
                 player.writeFinalHandToOutputFile();
 
+            }
 
+            // Write to the CardDeck output files
+            for (CardDeck deck : cardDeckArray){
+                deck.writeLineToOutputFile( deck.toString() );
             }
 
 

@@ -47,21 +47,23 @@ public class Player extends Thread {
             if (hasWon) {
                 CardGame.setWin(this);
             }
-            // otherwise make the player take their turn
-            else {
-                this.pickupCard();
-                this.discardCard();
-                this.writeCurrentHandToOutputFile();
 
-            }
-
-            // continue when all other threads have also taken their turns
-            // if it throws an error, its because a thread won, so we dont care about it
+            // continue once all other threads have checked their win condition
+            // if it throws an error, its because a thread won, so we dont care
             //TODO: break; is bad practise, but it works.
             try{
                 barrier.await();
             } catch (Exception e){
                 break;
+            }
+
+            // otherwise make the player take their turn
+            // Check if the thread has been interrupted again incase a player won
+            if(!Thread.interrupted()) {
+                this.pickupCard();
+                this.discardCard();
+                this.writeCurrentHandToOutputFile();
+
             }
         }
     }
