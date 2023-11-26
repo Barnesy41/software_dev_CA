@@ -31,4 +31,13 @@ public class CardDeck {
     public synchronized void pushTail(Card cardObject){
         deck.add(cardObject);
     }
+
+    @Override
+    public String toString() {
+        String cardValuesString = "";
+        for(Card card : deck) cardValuesString += card.getValue();
+
+        return "deck" + deckNumber +
+                " contents:" + cardValuesString;
+    }
 }

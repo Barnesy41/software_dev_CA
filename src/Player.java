@@ -1,17 +1,42 @@
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.CyclicBarrier;
 
 public class Player extends Thread {
     private final int playerNum;
-    private ArrayList<Card> currentHand = new ArrayList<Card>();
-    private int numTurnsHad=0;
+    private ArrayList<Card> currentHand = new ArrayList<Card>(); // is not final, ignore the error
     private final CardDeck discardDeck;
     private final CardDeck pickupDeck;
+    private final CyclicBarrier barrier; // Ensures threads all play the same number of turns by the end of the game
 
-    public Player (int playerNum, CardDeck pickupDeck, CardDeck disCardDeck){
+    public Player (int playerNum, CardDeck pickupDeck, CardDeck disCardDeck, CyclicBarrier barrier){
         this.playerNum = playerNum;
         this.discardDeck=disCardDeck;
         this.pickupDeck=pickupDeck;
+        this.barrier = barrier;
+    }
+
+    public void run(){
+        while(!Thread.interrupted()){
+            // Check if the player has won
+            if(this.checkWin()){
+                CardGame.setWin(this);
+            }
+            // make the player take their turn
+            else {
+                this.pickupCard();
+                this.discardCard();
+            }
+
+            // continue when all other threads have also taken their turns
+            // if it throws an error, its because a thread won, so we dont care about it
+            //TODO: break; is bad practise, but it works.
+            try{
+                barrier.await();
+            } catch (Exception e){
+                break;
+            }
+        }
     }
 
     public void appendToCurrentHand(Card card){
@@ -74,5 +99,14 @@ public class Player extends Thread {
 
     public int getPlayerNum(){
         return playerNum;
+    }
+
+    public String currentHandToString(){
+        String currentHandAsString = "";
+        for(Card card : currentHand){
+            currentHandAsString += card.getValue();
+        }
+
+        return currentHandAsString;
     }
 }

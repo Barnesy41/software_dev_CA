@@ -21,7 +21,7 @@ public class Pack {
             File file = new File(filePath);
 
             //init a file reader
-            Scanner reader = new Scanner(file); //PROBLEM HERE
+            Scanner reader = new Scanner(file);
 
             // Read each line, and append it to the list.
             ArrayList<Integer> packArray = new ArrayList<Integer>();
@@ -43,7 +43,7 @@ public class Pack {
      *
      * @return true if the pack is valid, & false if the pack is invalid
      */
-    public boolean validatePack(int numPlayers){
+    public boolean isValidPack(int numPlayers){
         try{
             // Check that no errors occur when reading the file
             if (this.toIntArray() == null) return false;

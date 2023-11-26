@@ -1,33 +1,46 @@
 import java.util.ArrayList;
 import java.util.Scanner; // allows user input
+import java.util.concurrent.CyclicBarrier;
+
 public class CardGame {
-    public static void main(String[] args) {
-        Boolean isWon = false;
-        
-        int numPlayers = inputNumPlayers();
+    private final ArrayList<CardDeck> cardDeckArray;
+    private final ArrayList<Player> playerArray;
+    private final int numPlayers;
+    private final Pack pack;
+    private static ArrayList<Thread> playerThreadArray;
+
+    public CardGame(){
+        playerThreadArray = new ArrayList<Thread>();
+
+        // get required user inputs
+        numPlayers = inputNumPlayers();
         String packPath = inputPackPath();
 
         // Instantiate the pack object
-        Pack pack = new Pack(packPath);
+        Pack inputPack = new Pack(packPath);
 
         // Ensure that the given pack is valid,
-        // Otherwise get a valid pack
-        while(!pack.validatePack(numPlayers)){
+        // Otherwise ask for a valid pack
+        while(!inputPack.isValidPack(numPlayers)){
             packPath = inputPackPath();
-            pack = new Pack(packPath);
+            inputPack = new Pack(packPath);
         }
+        pack = inputPack; //TODO: make the above nicer, so pack = function() only.
 
-        // Create the necessary number Player & CardDeck objects, and store them in an array
-        //TODO: The preferred value should probably be chosen from the pack, rather than starting from 1 and going up
-        ArrayList<Player> playerArray = new ArrayList<Player>();
-        ArrayList<CardDeck> cardDeckArray = new ArrayList<CardDeck>();
+        // Instantiate arrays to store the players & card decks
+        playerArray = new ArrayList<Player>();
+        cardDeckArray = new ArrayList<CardDeck>();
 
-        //Generates all the decks
-        for(int i=0; i<numPlayers; i++) {
+        //Generates all the CardDecks
+        for(int i=1; i<=numPlayers; i++) {
             cardDeckArray.add(new CardDeck(i));
         }
 
-        //Generates all players and assigns decks to them
+        //Create a barrier to ensure that all threads wait until all other threads are done before continuing
+        CyclicBarrier barrier = new CyclicBarrier(numPlayers);
+
+        //Generate all players
+        // Assign CardDecks to players, 1 to discard cards to and 1 to pick cards up from
         for(int i=0; i<numPlayers; i++) {
             //determines which deck is assigned as player's discard deck
             int discardDeckNum;
@@ -38,35 +51,22 @@ public class CardGame {
                 discardDeckNum=i+1;
             }
 
-            playerArray.add(new Player(i+1, cardDeckArray.get(i), cardDeckArray.get(discardDeckNum)));
-            playerArray.get(i).start(); //This starts running the thread for the player
+            // instantiate each player, and assign them a thread
+            Player player = new Player(i+1, cardDeckArray.get(i), cardDeckArray.get(discardDeckNum), barrier);
+            Thread thread = new Thread(player);
+
+            // add each player & thread to an array
+            playerArray.add(player);
+            playerThreadArray.add(thread);
         }
 
         // Deal the cards
         dealCards(pack, playerArray, cardDeckArray);
 
-        // Start the game play cycle
-        int numTurns = 0;
-        Player winner=null;
-        while(!isWon) {
-            // Stores which players turn it is
-            int playersTurn = numTurns++ % numPlayers;
-            Player player = playerArray.get(playersTurn);
-
-            // Syncronised for thread safety
-            synchronized (playerArray.get(playersTurn)){
-                player.pickupCard();
-                player.discardCard();
-            }
-
-            if(player.checkWin()){
-                isWon = true;
-                winner = player;
-            }
+        // Start all threads for players
+        for (Thread thread : playerThreadArray){
+            thread.start();
         }
-        System.out.println("player " + winner.getPlayerNum() + " won!\n");
-        
-
     }
 
     private static int inputNumPlayers(){
@@ -79,11 +79,11 @@ public class CardGame {
         while(numPlayers < 1) {
             try {
                 // get the user to input the number of players
-                System.out.println("Please Enter The Number Of Players:\n");
+                System.out.println("Please enter the number of players:");
                 numPlayers = scanner.nextInt();
             }
             catch (Exception e){
-                System.out.println("Invalid number of players.\n");
+                System.out.println("Invalid number of players.");
             }
         }
 
@@ -94,16 +94,16 @@ public class CardGame {
         // init scanner
         Scanner scanner = new Scanner(System.in);
 
-        // Continue asking for inputs until the path is valid
+        // Continue asking for inputs until the pack file location given is valid
         String packPath = "";
         while(packPath.equals("")) {
             try {
                 // get the user to input the number of players
-                System.out.println("Please Enter The Path To The Pack To Load:\n");
+                System.out.println("Please enter location of pack to load:");
                 packPath = scanner.nextLine();
             }
             catch (Exception e) {
-                System.out.println("Invalid Pack Path.\n");
+                System.out.println("Invalid Pack Path.");
             }
         }
         return packPath;
@@ -134,4 +134,20 @@ public class CardGame {
             deckToDealTo.pushTail(card);
         }
     }
+
+    public static synchronized void setWin(Player winningPlayerObject){
+        interruptAllPlayerThreads();
+        System.out.println("The winner is player" + winningPlayerObject.getPlayerNum());
+        System.out.println("With the hand: " + winningPlayerObject.currentHandToString());
+    }
+
+    public static void main(String[] args) {
+        new CardGame(); // Yes this is needed, despite it not looking like it should be
+
+    }
+
+    public static synchronized void interruptAllPlayerThreads(){
+        for(Thread thread : playerThreadArray) thread.interrupt();
+    }
+
 }
