@@ -13,8 +13,8 @@ public class CardGame {
         playerThreadArray = new ArrayList<Thread>();
 
         // get required user inputs
-        numPlayers = inputNumPlayers();
-        String packPath = inputPackPath();
+        numPlayers = 4;
+        String packPath = "4players.txt";
 
         // Instantiate the pack object
         Pack inputPack = new Pack(packPath);
@@ -136,9 +136,12 @@ public class CardGame {
     }
 
     public static synchronized void setWin(Player winningPlayerObject){
-        interruptAllPlayerThreads();
-        System.out.println("The winner is player" + winningPlayerObject.getPlayerNum());
-        System.out.println("With the hand: " + winningPlayerObject.currentHandToString());
+        // ensure that only 1 thread can call this method
+        if(!Thread.interrupted()) {
+            interruptAllPlayerThreads();
+            System.out.println("The winner is player" + winningPlayerObject.getPlayerNum());
+            System.out.println("With the hand: " + winningPlayerObject.currentHandToString());
+        }
     }
 
     public static void main(String[] args) {

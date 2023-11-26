@@ -8,21 +8,25 @@ public class Player extends Thread {
     private final CardDeck discardDeck;
     private final CardDeck pickupDeck;
     private final CyclicBarrier barrier; // Ensures threads all play the same number of turns by the end of the game
+    private final Object lock;
 
     public Player (int playerNum, CardDeck pickupDeck, CardDeck disCardDeck, CyclicBarrier barrier){
         this.playerNum = playerNum;
         this.discardDeck=disCardDeck;
         this.pickupDeck=pickupDeck;
         this.barrier = barrier;
+        this.lock = new Object();
     }
 
     public void run(){
         while(!Thread.interrupted()){
+            boolean hasWon = this.checkWin();
+
             // Check if the player has won
-            if(this.checkWin()){
+            if (hasWon) {
                 CardGame.setWin(this);
             }
-            // make the player take their turn
+            // otherwise make the player take their turn
             else {
                 this.pickupCard();
                 this.discardCard();
