@@ -1,11 +1,5 @@
-public class Card implements Runnable {
+public class Card {
     private final int value;
-
-    public void run() {
-        while(!Thread.currentThread().isInterrupted()) {
-            break;
-        }
-    }
 
     public Card (int value){
         this.value = value;

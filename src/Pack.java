@@ -53,9 +53,8 @@ public class Pack {
             if (packArray.size() != 8 * numPlayers) return false;
 
             // Check that the pack file contains non-negative integers
-            for (int value : packArray){
-                if (value < 0) return false;
-            }
+            for (int value : packArray) if (value < 0) return false;
+
         }
         // If an error is produced, the pack is invalid.
         catch(Exception e){
