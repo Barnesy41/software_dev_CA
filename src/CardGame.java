@@ -2,30 +2,28 @@ import java.util.ArrayList;
 import java.util.Scanner; // allows user input
 import java.util.concurrent.CyclicBarrier;
 
+//TODO: In doc it says that "By multi-threading, players should NOT play the game sequentially, i.e., NOT in a way that, when one player finishes actions another player starts."
+
 public class CardGame {
     private static ArrayList<CardDeck> cardDeckArray;
     private static ArrayList<Player> playerArray;
     private final int numPlayers;
-    private final Pack pack;
+    private Pack pack;
     private static ArrayList<Thread> playerThreadArray;
 
     public CardGame(){
         playerThreadArray = new ArrayList<Thread>();
 
-        // get required user inputs
+        // gets number of players
         numPlayers = inputNumPlayers();
-        String packPath = inputPackPath();
-
-        // Instantiate the pack object
-        Pack inputPack = new Pack(packPath);
 
         // Ensure that the given pack is valid,
         // Otherwise ask for a valid pack
-        while(!inputPack.isValidPack(numPlayers)){
-            packPath = inputPackPath();
-            inputPack = new Pack(packPath);
+        do {
+            String packPath = inputPackPath();
+            pack = new Pack(packPath);
         }
-        pack = inputPack; //TODO: make the above nicer, so pack = function() only.
+        while(!pack.isValidPack(numPlayers));
 
         // Instantiate arrays to store the players & card decks
         playerArray = new ArrayList<Player>();
@@ -78,7 +76,6 @@ public class CardGame {
         // init scanner
         Scanner scanner = new Scanner(System.in);
 
-        // TODO: check what the minimum numPlayers is
         // Continue asking for inputs until the number of players is valid
         int numPlayers = 0;
         while(numPlayers < 1) {
@@ -89,6 +86,7 @@ public class CardGame {
             }
             catch (Exception e){
                 System.out.println("Invalid number of players.");
+                //TODO: Never actually shows this line
             }
         }
 
@@ -207,7 +205,6 @@ public class CardGame {
 
     public static void main(String[] args) {
         new CardGame(); // Yes this is needed, despite it not looking like it should be
-
     }
 
 }
