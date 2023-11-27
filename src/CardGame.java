@@ -83,10 +83,14 @@ public class CardGame {
                 // get the user to input the number of players
                 System.out.println("Please enter the number of players:");
                 numPlayers = scanner.nextInt();
+
+                if (numPlayers < 1) {
+                    System.out.println("Invalid number of players. Number of players should be 1 or more.");
+                }
             }
             catch (Exception e){
-                System.out.println("Invalid number of players.");
-                //TODO: Never actually shows this line
+                System.out.println("Invalid input. Please enter valid number.");
+                scanner.next(); //clears input buffer so scanner doesn't loop infinitely
             }
         }
 
