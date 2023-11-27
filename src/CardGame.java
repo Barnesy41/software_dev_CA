@@ -104,15 +104,14 @@ public class CardGame {
      * @return the file location of the pack
      */
     private static String inputPackPath(Scanner scanner){
-        scanner.nextLine(); //clears input of number of players
-
         // Continue asking for inputs until the pack file location given is valid
         String packPath = "";
         while(packPath.equals("")) {
+            packPath = scanner.nextLine(); //ensures fresh input
+            
             try {
                 // get the user to input the number of players
                 System.out.println("Please enter location of pack to load:");
-                packPath = scanner.nextLine();
             }
             catch (Exception e) {
                 System.out.println("Invalid Pack Path.");
