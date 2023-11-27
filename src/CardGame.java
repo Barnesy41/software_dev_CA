@@ -13,17 +13,21 @@ public class CardGame {
 
     public CardGame(){
         playerThreadArray = new ArrayList<Thread>();
+        Scanner scanner = new Scanner(System.in); //used for reading inputs
 
         // gets number of players
-        numPlayers = inputNumPlayers();
+        numPlayers = inputNumPlayers(scanner);
 
         // Ensure that the given pack is valid,
         // Otherwise ask for a valid pack
         do {
-            String packPath = inputPackPath();
+            String packPath = inputPackPath(scanner);
             pack = new Pack(packPath);
         }
         while(!pack.isValidPack(numPlayers));
+
+        //Closes the scanner
+        scanner.close();
 
         // Instantiate arrays to store the players & card decks
         playerArray = new ArrayList<Player>();
@@ -72,10 +76,7 @@ public class CardGame {
      *
      * @return the number of players
      */
-    private static int inputNumPlayers(){
-        // init scanner
-        Scanner scanner = new Scanner(System.in);
-
+    private static int inputNumPlayers(Scanner scanner){
         // Continue asking for inputs until the number of players is valid
         int numPlayers = 0;
         while(numPlayers < 1) {
@@ -102,9 +103,8 @@ public class CardGame {
      *
      * @return the file location of the pack
      */
-    private static String inputPackPath(){
-        // init scanner
-        Scanner scanner = new Scanner(System.in);
+    private static String inputPackPath(Scanner scanner){
+        scanner.nextLine(); //clears input of number of players
 
         // Continue asking for inputs until the pack file location given is valid
         String packPath = "";
@@ -140,7 +140,7 @@ public class CardGame {
 
         // deal cards to CardDecks
         int numCardDecks = numPlayers;
-        for(cardIndex=cardIndex;cardIndex<packAsInts.size(); cardIndex++){
+        for(; cardIndex<packAsInts.size(); cardIndex++){
             Card card = new Card(packAsInts.get(cardIndex));
             CardDeck deckToDealTo = cardDeckArray.get(cardIndex % numCardDecks);
             deckToDealTo.pushTail(card);

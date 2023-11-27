@@ -34,6 +34,7 @@ public class Pack {
                 packArray.add(reader.nextInt());
             }
 
+            reader.close();
             return packArray;
         }
         catch (Exception e){
