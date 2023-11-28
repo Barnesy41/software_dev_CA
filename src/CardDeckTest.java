@@ -1,15 +1,15 @@
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 //TODO: Check in main game if cards are being added/removed from deck output file
+
+//TODO: Even thought it is impossible for toString() to be run with an invalid deck, should I still run tests for it?
+
 
 public class CardDeckTest {
     
@@ -32,11 +32,9 @@ public class CardDeckTest {
 
     public String getDeckStringFromFile(Integer deckNumber) {
         try {
-            System.out.println("here2");
             File file = new File("deck" + deckNumber + "_output.txt");
 
             Scanner reader = new Scanner(file);
-            System.out.println("here3");
 
             // Read each line, and append it to the list.
             String deckString = "";
@@ -46,7 +44,6 @@ public class CardDeckTest {
 
             reader.close();
             
-            System.out.println(deckString);
             return "deck" + deckNumber +
                 " contents:" + deckString;
         }
@@ -78,10 +75,6 @@ public class CardDeckTest {
         assertEquals("deck1 contents: 1 2 3 4", deck.toString());
     }
 
-    //TODO: Test file output is accurate using toString() and getting input from file
-
-    //TODO: Even thought it is impossible for toString() to be run with an invalid deck, should I still run tests for it?
-
     //Tests that a file gets overwritten if a deck of the same number is created 
     @Test
     public void CheckFileGetsOverwritten() {
@@ -98,5 +91,37 @@ public class CardDeckTest {
         deck.writeLineToOutputFile("8");
         
         assertEquals("deck1 contents: 2 4 6 8", getDeckStringFromFile(1));
+    }
+
+    @Test
+    public void getDeckNumberTest() {
+        CardDeck deck = createStandardDeck();
+
+        assertEquals(deck.getDeckNumber(), 1);
+    }
+
+    @Test
+    public void popHeadTest() {
+        CardDeck deck = createStandardDeck();
+
+        Card topCard = deck.popHead();
+        assertEquals(1, topCard.getValue());
+    }
+
+    @Test
+    public void pushTailTest() {
+        CardDeck deck = createStandardDeck();
+        Card finalCard = new Card(5);
+
+        deck.pushTail(finalCard);
+        assertEquals(deck.toString(), "deck1 contents: 1 2 3 4 5");
+    }
+
+    @Test
+    public void writingLineToOutputFileTest() {
+        CardDeck deck = createStandardDeck();
+        deck.writeLineToOutputFile("100");
+
+        assertEquals("deck1 contents: 1 2 3 4 100", getDeckStringFromFile(1));
     }
 }
