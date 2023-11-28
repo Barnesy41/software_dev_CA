@@ -54,7 +54,7 @@ public class CardGame {
             }
 
             // instantiate each player, and assign them a thread
-            Player player = new Player(i+1, cardDeckArray.get(i), cardDeckArray.get(discardDeckNum), barrier);
+            Player player = new Player(i+1, cardDeckArray.get(i), cardDeckArray.get(discardDeckNum));
             Thread thread = new Thread(player);
 
             // add each player & thread to an array

@@ -4,14 +4,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.CyclicBarrier;
 
 public class Player extends Thread {
     private final int playerNum;
     private ArrayList<Card> currentHand = new ArrayList<Card>(); // is not final, ignore the error
     private final CardDeck discardDeck;
     private final CardDeck pickupDeck;
-    private final CyclicBarrier barrier; // Ensures threads all play the same number of turns by the end of the game
     private final File outputFile;
     private final String outputFilePath;
 
@@ -23,13 +21,11 @@ public class Player extends Thread {
      * @param playerNum the number of players playing the game
      * @param pickupDeck the deck object that the player picks up from the top of
      * @param disCardDeck the deck object that the player discards to the bottom of
-     * @param barrier syncs threads with one another at the end of each turn
      */
-    public Player (int playerNum, CardDeck pickupDeck, CardDeck disCardDeck, CyclicBarrier barrier){
+    public Player (int playerNum, CardDeck pickupDeck, CardDeck disCardDeck){
         this.playerNum = playerNum;
         this.discardDeck=disCardDeck;
         this.pickupDeck=pickupDeck;
-        this.barrier = barrier;
         this.outputFilePath = "player" + playerNum + "_output.txt";
         this.outputFile = new File(outputFilePath);
 
