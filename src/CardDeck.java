@@ -43,10 +43,17 @@ public class CardDeck {
      *
      * @return head - the top card from the deck
      */
-    public synchronized Card popHead() {
+    public Card popHead() {
         Card head = deck.get(0);
         deck.remove(0);
         return head;
+    }
+
+    /**
+     * @return returns the number of cards in the current deck
+     */
+    public int getNumCardsInDeck(){
+        return deck.size();
     }
 
     /**
@@ -54,7 +61,7 @@ public class CardDeck {
      *
      * @param cardObject the card to place on the bottom of the deck
      */
-    public synchronized void pushTail(Card cardObject){
+    public void pushTail(Card cardObject){
         deck.add(cardObject);
     }
 
