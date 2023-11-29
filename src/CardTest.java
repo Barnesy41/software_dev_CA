@@ -6,8 +6,9 @@ public class CardTest {
     
     //TODO: Do we need any more tests here?
 
+    //Tests that getValue() works as expected
     @Test
-    public void cardReturnsCorrectValue() {
+    public void getValueTest() {
         Card testCard = new Card(4);
         assertEquals(4, testCard.getValue());
     }

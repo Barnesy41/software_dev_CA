@@ -1,5 +1,6 @@
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -12,6 +13,7 @@ public class PackTest {
 
     //Testing toIntArray method
 
+    //Tests that toIntArray() correctly converts pack file to an int array (using standard pack)
     @Test
     public void toIntArrayCorrectlyConverts () {
         Pack pack = new Pack("4players.txt");
@@ -25,6 +27,7 @@ public class PackTest {
         }
     }
 
+    //Tests that null is returned when user attempts to use toIntArray() on file in incorrect format
     @Test
     public void toIntArrayFileIsString () {
         Pack pack = new Pack("packIncorrectFormat.txt");
@@ -33,34 +36,39 @@ public class PackTest {
 
     //Testing isValidPack method
 
+    //Tests that isValidPack() returns true when the pack and exists and is accurate for that number of players
     @Test
     public void isValidPackTestFileExistsCorrectNumPlayers() {
         Pack pack = new Pack("4players.txt");
         assertTrue(pack.isValidPack(4));
     };
 
+    //Tests that isValidPack() returns false if the pack is not built for specified number of players
     @Test
     public void isValidPackIncorrectNumPlayers() {
         Pack pack = new Pack("4players.txt");
-        assertTrue(pack.isValidPack(3)==false);
+        assertFalse(pack.isValidPack(3));
     };
 
+    //Tests that isValidPack() returns false if the file specified doesn't exist
     @Test
     public void isValidPackTestFileDoesntExist() {
         Pack pack = new Pack("nonexistentfile.txt");
-        assertTrue(pack.isValidPack(4)==false);
+        assertFalse(pack.isValidPack(4));
     };
 
+    //Tests that isValidPack() returns false if the file is not in the correct format
     @Test
     public void isValidPackIncorrectFormat() {
         Pack pack = new Pack("packIncorrectFormat.txt");
-        assertTrue(pack.isValidPack(4)==false);
+        assertFalse(pack.isValidPack(4));
     };
 
+    //Tests that isValidPack() returns false if the pack contains negative integers
     @Test
     public void isValidPackNegativeIntegers() {
         Pack pack = new Pack("negativeIntegersPack.txt");
-        assertTrue(pack.isValidPack(4)==false);
+        assertFalse(pack.isValidPack(4));
     };
 
 };

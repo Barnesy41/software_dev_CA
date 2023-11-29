@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.Scanner; // allows user input
-import java.util.concurrent.CyclicBarrier;
 
 //TODO: In doc it says that "By multi-threading, players should NOT play the game sequentially, i.e., NOT in a way that, when one player finishes actions another player starts."
 
