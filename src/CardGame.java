@@ -38,9 +38,6 @@ public class CardGame {
             cardDeckArray.add(new CardDeck(i));
         }
 
-        //Create a barrier to ensure that all threads wait until all other threads are done before continuing
-        CyclicBarrier barrier = new CyclicBarrier(numPlayers);
-
         //Generate all players
         // Assign CardDecks to players, 1 to discard cards to and 1 to pick cards up from
         for(int i=0; i<numPlayers; i++) {

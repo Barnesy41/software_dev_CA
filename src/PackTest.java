@@ -6,6 +6,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+//TODO: Should I allow filePath to be passed as arguments to test instead of using ones I created?
+
 public class PackTest {
 
     //Testing toIntArray method
