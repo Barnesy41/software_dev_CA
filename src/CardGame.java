@@ -73,7 +73,7 @@ public class CardGame {
     private static int inputNumPlayers(Scanner scanner){
         // Continue asking for inputs until the number of players is valid
         int numPlayers = 0;
-        while(numPlayers < 1) {
+        while(numPlayers < 2) {
             try {
                 // get the user to input the number of players
                 System.out.println("Please enter the number of players:");
