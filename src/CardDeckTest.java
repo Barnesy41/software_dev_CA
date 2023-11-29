@@ -6,9 +6,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.util.Scanner;
 
-//TODO: Even thought it is impossible for toString() to be run with an invalid deck, should I still run tests for it?
-
-
 public class CardDeckTest {
     
     //FUNCTIONS USED FOR TESTS 

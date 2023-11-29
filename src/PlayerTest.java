@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import org.junit.Test;
 
-//TODO: Do tests have to run in a certain amount of time?
-
 public class PlayerTest {
 
     //The run() method is tested in the CardGameTest
@@ -67,10 +65,6 @@ public class PlayerTest {
             assertEquals(hand.get(i), player.getCurrentHand().get(i));
         }
     }
-
-    //TODO: This 2 tests below are sort of reliant on each other, is there any way for them not to be?
-    //Can't use getCurrentHand() instead because then 2 tests are still reliant on each other
-    //Atm though they're basically just the same test
 
     //Tests that currentHandToString() works as expected
     @Test

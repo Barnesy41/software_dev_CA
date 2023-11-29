@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 import java.util.Scanner; // allows user input
 
-//TODO: In doc it says that "By multi-threading, players should NOT play the game sequentially, i.e., NOT in a way that, when one player finishes actions another player starts."
-
 public class CardGame {
     private static ArrayList<CardDeck> cardDeckArray;
     private static ArrayList<Player> playerArray;
@@ -187,11 +185,9 @@ public class CardGame {
             }
 
             // Write to the CardDeck output files
-            for (CardDeck deck : cardDeckArray){
+            for (CardDeck deck : cardDeckArray) {
                 deck.writeLineToOutputFile( deck.toString() );
             }
-
-
         }
     }
 
@@ -203,7 +199,12 @@ public class CardGame {
     }
 
     public static void main(String[] args) {
-        new CardGame(); // Yes this is needed, despite it not looking like it should be
+        new CardGame();
     }
+    
+    //FOR TESTING PURPOSES
 
+    public static ArrayList<Thread> getThreadArray() {
+        return playerThreadArray;
+    }
 }
