@@ -24,16 +24,10 @@ public class CardGameTest {
         new CardGame();
         ArrayList<Thread> threads = CardGame.getThreadArray();
         Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-
-        Boolean isFinished = true;
-
-        do {
-            isFinished = true;
             
-            for(Thread thread : threadSet) {
-                System.out.println(thread.threadId());
-            }
-        } while(!isFinished);
+        for(Thread thread : threadSet) {
+            System.out.println(thread.isInterrupted());
+        }
 
         int winnerPlayerNum = 1;
 
