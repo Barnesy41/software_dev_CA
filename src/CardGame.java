@@ -101,11 +101,14 @@ public class CardGame {
         // Continue asking for inputs until the pack file location given is valid
         String packPath = "";
         while(packPath.equals("")) {
-            packPath = scanner.nextLine(); //ensures fresh input
-            
+
             try {
                 // get the user to input the number of players
                 System.out.println("Please enter location of pack to load:");
+                scanner.nextLine(); //consume the new line character
+                packPath = scanner.nextLine(); //ensures fresh input
+
+
             }
             catch (Exception e) {
                 System.out.println("Invalid Pack Path.");
@@ -194,8 +197,19 @@ public class CardGame {
     /**
      * interrupts the threads of all players, stopping the threads from running.
      */
-    public static synchronized void interruptAllPlayerThreads(){
+    public static void interruptAllPlayerThreads(){
         for(Thread thread : playerThreadArray) thread.interrupt();
+
+        //wait for all player threads to stop before finishing function run
+        ArrayList<Thread> threads = getThreadArray();
+        for(Thread thread : threads) {
+            try{
+                thread.join();
+            } catch (InterruptedException e){
+                Thread.currentThread().interrupt(); //Ensures all threads stay interrupted
+            }
+            thread.interrupt(); // Ensures the thread is interrupted
+        }
     }
 
     public static void main(String[] args) {

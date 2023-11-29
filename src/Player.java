@@ -58,6 +58,7 @@ public class Player extends Thread {
             // Check if the player has won
             if (hasWon) {
                 CardGame.setWin(this);
+                currentThread().interrupt();
             }
 
             // otherwise make the player take their turn
