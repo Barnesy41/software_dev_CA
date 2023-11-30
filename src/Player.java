@@ -3,6 +3,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.Random;
 
 public class Player extends Thread {
@@ -12,6 +13,7 @@ public class Player extends Thread {
     private final CardDeck pickupDeck;
     private final File outputFile;
     private final String outputFilePath;
+    private static final Object sharedLock = new Object();
 
     /**
      * instantiates a player object.
@@ -49,7 +51,7 @@ public class Player extends Thread {
      */
     public void run(){
 
-        while(!Thread.interrupted()){
+        while(!Thread.interrupted()) {
             boolean hasWon = this.checkWin();
 
             // Check if the player has won
@@ -60,10 +62,12 @@ public class Player extends Thread {
 
             // otherwise make the player take their turn
             // Check if the thread has been interrupted again incase a player won
-            else if(pickupDeck.getNumCardsInDeck() != 0) {
-                this.pickupCard();
-                this.discardCard();
-                this.writeCurrentHandToOutputFile();
+            synchronized (sharedLock) { // Ensure threads cannot alter decks at the same time.
+                if (pickupDeck.getNumCardsInDeck() != 0 && !hasWon) {
+                    this.pickupCard();
+                    this.discardCard();
+                    this.writeCurrentHandToOutputFile();
+                }
             }
         }
     }
@@ -106,7 +110,6 @@ public class Player extends Thread {
      */
     public void pickupCard() {
 
-        System.out.println(pickupDeck);
         Card newCard = pickupDeck.popHead();
         this.appendToCurrentHand(newCard);
 
@@ -178,12 +181,17 @@ public class Player extends Thread {
      * @return the player's current hand in string format
      */
     public String currentHandToString(){
-
-        System.out.println(currentHand);
         String currentHandAsString = "";
-        for(Card card : currentHand){
-            currentHandAsString += card.getValue() + " ";
-        }
+        do {
+            // Handle ConcurrentModificationException
+            try {
+                for (Card card : currentHand) {
+                    currentHandAsString += card.getValue() + " ";
+                }
+            }
+            catch (ConcurrentModificationException ignored) {}
+
+        } while (currentHandAsString == "");
 
         return currentHandAsString;
     }

@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Scanner; // allows user input
+import java.util.concurrent.CountDownLatch;
 
 public class CardGame {
     private static ArrayList<CardDeck> cardDeckArray;
@@ -7,6 +8,7 @@ public class CardGame {
     private final int numPlayers;
     private Pack pack;
     private static ArrayList<Thread> playerThreadArray;
+    private static final CountDownLatch countDownLatch = new CountDownLatch(1);
 
     public CardGame() {
         playerThreadArray = new ArrayList<Thread>();
@@ -78,6 +80,10 @@ public class CardGame {
                 thread.start();
             }
         }
+
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException ignored) {}
     }
 
     /**
@@ -198,8 +204,12 @@ public class CardGame {
                 // Output each player's hand to the output file
                 player.writeFinalHandToOutputFile();
 
+                // (end the game)
+                countDownLatch.countDown();
             }
 
+            // Checks all threads have remained interrupted - we had some errors caused by this not being the case
+            interruptAllPlayerThreads();
             // Write to the CardDeck output files
             for (CardDeck deck : cardDeckArray) {
                 deck.writeLineToOutputFile( deck.toString() );
@@ -222,6 +232,7 @@ public class CardGame {
                 Thread.currentThread().interrupt(); //Ensures all threads stay interrupted
             }
             thread.interrupt(); // Ensures the thread is interrupted
+            Thread.currentThread().interrupt();
         }
     }
 

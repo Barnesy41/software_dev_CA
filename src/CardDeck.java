@@ -71,7 +71,7 @@ public class CardDeck {
      * deck1 contents: 1 2 3 4
      */
     @Override
-    public String toString() {
+    public synchronized String toString() {
         String cardValuesString = "";
         for(Card card : deck) cardValuesString += " " + card.getValue();
 

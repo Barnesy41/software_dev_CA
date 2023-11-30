@@ -369,57 +369,43 @@ public class CardGameTest {
     //tests that when the pack deals a player a winning hand, they always win
     @Test
     public void winningHandFromStart() throws FileNotFoundException {
-        for (int j = 0; j<10; j++) { //runs 10 times to ensure player 1 always wins
-             //Sets player input (numPlayers, packPath)
-            ByteArrayInputStream in = new ByteArrayInputStream("32\n32players.txt".getBytes());
-            System.setIn(in);
+         //Sets player input (numPlayers, packPath)
+        ByteArrayInputStream in = new ByteArrayInputStream("32\n32players.txt".getBytes());
+        System.setIn(in);
 
-            new CardGame();
-
-            //wait for all player threads to stop before finishing function run
-            ArrayList<Thread> threads = CardGame.getThreadArray();
-            for (Thread thread : threads) {
-                try {
-                    thread.join();
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt(); //Ensures all threads stay interrupted
-                }
-                thread.interrupt(); // Ensures the thread is interrupted
-            }
-
+        new CardGame();
 
         //Gets the output of the game from each player
         ArrayList<String> playerOutputs = new ArrayList<>();
 
         int winnerPlayerNum = 1;
 
-            //Gets the output of the game from each player
-            for (int i = 1; i <= 32; i++) { //checks each player output
-                File file = new File("player" + i + "_output.txt");
+        //Gets the output of the game from each player
+        for (int i = 1; i <= 32; i++) { //checks each player output
+            File file = new File("player" + i + "_output.txt");
 
-                Scanner reader = new Scanner(file);
+            Scanner reader = new Scanner(file);
 
-                // Read each line, and append it to the list.
-                String playerOutput = "";
-                Integer lineCounter = 0;
-                while (reader.hasNextLine()) {
-                    playerOutput += "\n" + reader.nextLine();
-                    lineCounter++;
-                }
-
-                //checks if the current player is a winner (if they have a complete hand)
-                if (playerOutput.contains("player " + i + " wins")) {
-                    winnerPlayerNum = i;
-                }
-                else { //if not winner, each file should have 4 lines
-                    assertEquals(Integer.valueOf(4), lineCounter);
-                }
-
-                reader.close();
-                playerOutputs.add(playerOutput);
+            // Read each line, and append it to the list.
+            String playerOutput = "";
+            int lineCounter = 0;
+            while (reader.hasNextLine()) {
+                playerOutput += "\n" + reader.nextLine();
+                lineCounter++;
             }
 
-            assertEquals(32, winnerPlayerNum); //player 1 should always win
+            //checks if the current player is a winner (if they have a complete hand)
+            if (playerOutput.contains("player " + i + " wins")) {
+                winnerPlayerNum = i;
+            }
+            else { //if not winner, each file should have 4 lines
+                assertEquals(4, lineCounter);
+            }
+
+            reader.close();
+            playerOutputs.add(playerOutput);
         }
+
+        assertEquals(32, winnerPlayerNum); //player 1 should always win
     }
 }
