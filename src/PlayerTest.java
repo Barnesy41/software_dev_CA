@@ -86,7 +86,7 @@ public class PlayerTest {
         player.appendToCurrentHand(new Card(1000));
         player.appendToCurrentHand(new Card(1001));
         player.appendToCurrentHand(new Card(1002));
-        assertEquals("999 1000 1001 ", player.currentHandToString());
+        assertEquals("999 1000 1001 1002 ", player.currentHandToString());
     }
 
     //Tests removing a card from a current hand (that is in the current hand)
