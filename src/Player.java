@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class Player extends Thread {
     private final int playerNum;
-    private ArrayList<Card> currentHand = new ArrayList<Card>(); // is not final, ignore the error
+    private ArrayList<Card> currentHand = new ArrayList<Card>();
     private final CardDeck discardDeck;
     private final CardDeck pickupDeck;
     private final File outputFile;

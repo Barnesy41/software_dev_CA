@@ -31,7 +31,6 @@ public class PlayerTest {
         disCardDeck.pushTail(new Card(7));
         disCardDeck.pushTail(new Card(8));
 
-        //Returns player with these decks
         return (new Player(1, pickupDeck, disCardDeck));
     }
 
@@ -102,7 +101,6 @@ public class PlayerTest {
         player.appendToCurrentHand(new Card(1001));
         player.appendToCurrentHand(new Card(1002));
 
-        //Removes card from hand
         player.removeFromCurrentHand(selectedCard);
 
         assertEquals("999 1001 1002 ", player.currentHandToString());
@@ -119,7 +117,6 @@ public class PlayerTest {
         player.appendToCurrentHand(new Card(1001));
         player.appendToCurrentHand(new Card(1002));
 
-        //Removes card from hand
         player.removeFromCurrentHand(new Card(10));
 
         assertEquals("999 1000 1001 1002 ", player.currentHandToString());

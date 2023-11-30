@@ -19,14 +19,12 @@ public class CardGame {
 
         // Ensure that the given pack is valid,
         // Otherwise ask for a valid pack
-
         do {
             String packPath = inputPackPath(scanner);
             pack = new Pack(packPath);
         }
         while(!pack.isValidPack(numPlayers));
 
-        //Closes the scanner
         scanner.close();
 
         // Instantiate arrays to store the players & card decks
@@ -54,7 +52,6 @@ public class CardGame {
             Player player = new Player(i+1, cardDeckArray.get(i), cardDeckArray.get(discardDeckNum));
             Thread thread = new Thread(player);
 
-            // add each player & thread to an array
             playerArray.add(player);
             playerThreadArray.add(thread);
         }
@@ -65,8 +62,8 @@ public class CardGame {
         //Ensures game does not start running if player starts with winning hand
         Boolean gameWon = false;
         for(Player player : playerArray) {
-            // Outout initial hand to player output files
-        player.writeLineToOutputFile("player " + player.getPlayerNum() + " initial hand " + player.currentHandToString());
+            // Output initial hand to player output files
+            player.writeLineToOutputFile("player " + player.getPlayerNum() + " initial hand " + player.currentHandToString());
             if (player.checkWin()) {
                 CardGame.setWin(player);
                 gameWon = true;

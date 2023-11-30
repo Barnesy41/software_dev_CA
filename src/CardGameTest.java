@@ -111,7 +111,7 @@ public class CardGameTest {
             }
 
             for (int i = 0; i <= 3; i++) { //checks each player output contains the correct reference to winner
-                if (i != winnerPlayerNum - 1) { //this line means all threads get stopped
+                if (i != winnerPlayerNum - 1) {
                     assertTrue(playerOutputs.get(i).contains("player " + winnerPlayerNum + " has informed player " + (i + 1) + " that player " + winnerPlayerNum + " has won"));
                 }
             }
@@ -163,7 +163,7 @@ public class CardGameTest {
          }
 
          for (int i = 0; i <= 3; i++) { //checks each player output contains the correct reference to winner
-             if (i != winnerPlayerNum - 1) { //this line means all threads get stopped
+             if (i != winnerPlayerNum - 1) {
                  assertTrue(playerOutputs.get(i).contains("player " + winnerPlayerNum + " has informed player " + (i + 1) + " that player " + winnerPlayerNum + " has won"));
              }
          }
@@ -188,11 +188,6 @@ public class CardGameTest {
             }
             thread.interrupt(); // Ensures the thread is interrupted
         }
-
-        int winnerPlayerNum = 1;
-
-        //Gets the output of the game from each player
-        ArrayList<String> playerOutputs = new ArrayList<>();
 
         File file = new File("player1_output.txt");
 
@@ -256,7 +251,7 @@ public class CardGameTest {
             }
 
             for (int i = 0; i <= 3; i++) { //checks each player output contains the correct reference to winner
-                if (i != winnerPlayerNum - 1) { //this line means all threads get stopped
+                if (i != winnerPlayerNum - 1) {
                     assertTrue(playerOutputs.get(i).contains("player " + winnerPlayerNum + " has informed player " + (i + 1) + " that player " + winnerPlayerNum + " has won"));
                 }
             }
@@ -308,7 +303,7 @@ public class CardGameTest {
             }
 
             for (int i = 0; i <= 3; i++) { //checks each player output contains the correct reference to winner
-                if (i != winnerPlayerNum - 1) { //this line means all threads get stopped
+                if (i != winnerPlayerNum - 1) {
                     assertTrue(playerOutputs.get(i).contains("player " + winnerPlayerNum + " has informed player " + (i + 1) + " that player " + winnerPlayerNum + " has won"));
                 }
             }
@@ -360,7 +355,7 @@ public class CardGameTest {
         }
 
         for (int i = 0; i <= 2; i++) { //checks each player output contains the correct reference to winner
-            if (i != winnerPlayerNum - 1) { //this line means all threads get stopped
+            if (i != winnerPlayerNum - 1) {
                 assertTrue(playerOutputs.get(i).contains("player " + winnerPlayerNum + " has informed player " + (i + 1) + " that player " + winnerPlayerNum + " has won"));
             }
         }
