@@ -112,7 +112,6 @@ public class PlayerTest {
         //Removes card from hand
         player.removeFromCurrentHand(selectedCard);
 
-        System.out.println(player.currentHandToString());
         assertEquals("999 1001 ", player.currentHandToString());
     }
     
@@ -129,7 +128,6 @@ public class PlayerTest {
         //Removes card from hand
         player.removeFromCurrentHand(new Card(10));
 
-        System.out.println(player.currentHandToString());
         assertEquals("999 1000 1001 ", player.currentHandToString());
     }
 

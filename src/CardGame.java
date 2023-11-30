@@ -17,6 +17,7 @@ public class CardGame {
 
         // Ensure that the given pack is valid,
         // Otherwise ask for a valid pack
+
         do {
             String packPath = inputPackPath(scanner);
             pack = new Pack(packPath);
@@ -59,9 +60,21 @@ public class CardGame {
         // Deal the cards
         dealCards(pack, playerArray, cardDeckArray);
 
+        //Ensures game does not start running if player starts with winning hand
+        Boolean gameWon = false;
+        for(Player player : playerArray) {
+            if (player.checkWin()) {
+                CardGame.setWin(player);
+                gameWon = true;
+                break;
+            }
+        }
+
         // Start all threads for players
-        for (Thread thread : playerThreadArray){
-            thread.start();
+        if (!gameWon) {
+            for (Thread thread : playerThreadArray){
+                thread.start();
+            }
         }
     }
 
@@ -73,7 +86,7 @@ public class CardGame {
     private static int inputNumPlayers(Scanner scanner){
         // Continue asking for inputs until the number of players is valid
         int numPlayers = 0;
-        while(numPlayers < 2) {
+        while(numPlayers < 1) { //game is possible to play with 1 player
             try {
                 // get the user to input the number of players
                 System.out.println("Please enter the number of players:");
@@ -100,15 +113,13 @@ public class CardGame {
     private static String inputPackPath(Scanner scanner){
         // Continue asking for inputs until the pack file location given is valid
         String packPath = "";
+
         while(packPath.equals("")) {
 
             try {
                 // get the user to input the number of players
                 System.out.println("Please enter location of pack to load:");
-                scanner.nextLine(); //consume the new line character
-                packPath = scanner.nextLine(); //ensures fresh input
-
-
+                packPath = scanner.next();
             }
             catch (Exception e) {
                 System.out.println("Invalid Pack Path.");
@@ -158,7 +169,7 @@ public class CardGame {
             // Stop all other threads
             interruptAllPlayerThreads();
 
-            // Output necissary info to the terminal
+            // Output necessary info to the terminal
             System.out.println("player " + winningPlayerObject.getPlayerNum() + " wins");
             System.out.println("With the hand: " + winningPlayerObject.currentHandToString());
 
