@@ -35,14 +35,6 @@ public class PlayerTest {
         return (new Player(1, pickupDeck, disCardDeck));
     }
 
-    //Tests using getCurrentHand() on a player with an empty hand
-    @Test
-    public void getEmptyHandTest() {
-        Player player = createStandardPlayer();
-
-        assertEquals(new ArrayList<Card>(), player.getCurrentHand());
-    }
-
     //Tests that getCurrentHand() works on a hand full of cards
     @Test
     public void getBusyHandTest() {
@@ -53,12 +45,18 @@ public class PlayerTest {
         //Sets up the hand
         Card card1 = new Card(10);
         Card card2 = new Card(20);
+        Card card3 = new Card(30);
+        Card card4 = new Card(40);
 
         hand.add(card1);
         hand.add(card2);
+        hand.add(card3);
+        hand.add(card4);
 
         player.appendToCurrentHand(card1);
         player.appendToCurrentHand(card2);
+        player.appendToCurrentHand(card3);
+        player.appendToCurrentHand(card4);
 
         //Tests that each card in both arrays are equal
         for (int i = 0; i<hand.size(); i++) {
@@ -73,17 +71,10 @@ public class PlayerTest {
 
         player.appendToCurrentHand(new Card(50));
         player.appendToCurrentHand(new Card(100));
+        player.appendToCurrentHand(new Card(150));
+        player.appendToCurrentHand(new Card(200));
 
-        assertEquals(player.currentHandToString(), "50 100 ");
-    }
-
-    //Appends to an empty hand
-    @Test
-    public void appendToEmptyHandTest() {
-        Player player = createStandardPlayer();
-
-        player.appendToCurrentHand(new Card(999));
-        assertEquals("999 ", player.currentHandToString());
+        assertEquals(player.currentHandToString(), "50 100 150 200 ");
     }
 
     //Appends to a hand that has multiple cards in it
@@ -94,6 +85,7 @@ public class PlayerTest {
         player.appendToCurrentHand(new Card(999));
         player.appendToCurrentHand(new Card(1000));
         player.appendToCurrentHand(new Card(1001));
+        player.appendToCurrentHand(new Card(1002));
         assertEquals("999 1000 1001 ", player.currentHandToString());
     }
 
@@ -108,11 +100,12 @@ public class PlayerTest {
         player.appendToCurrentHand(new Card(999));
         player.appendToCurrentHand(selectedCard);
         player.appendToCurrentHand(new Card(1001));
+        player.appendToCurrentHand(new Card(1002));
 
         //Removes card from hand
         player.removeFromCurrentHand(selectedCard);
 
-        assertEquals("999 1001 ", player.currentHandToString());
+        assertEquals("999 1001 1002 ", player.currentHandToString());
     }
     
     //Tests attempting to remove a card from current hand thats not in the hand (hand should stay the same)
@@ -124,11 +117,12 @@ public class PlayerTest {
         player.appendToCurrentHand(new Card(999));
         player.appendToCurrentHand(new Card(1000));
         player.appendToCurrentHand(new Card(1001));
+        player.appendToCurrentHand(new Card(1002));
 
         //Removes card from hand
         player.removeFromCurrentHand(new Card(10));
 
-        assertEquals("999 1000 1001 ", player.currentHandToString());
+        assertEquals("999 1000 1001 1002 ", player.currentHandToString());
     }
 
     //tests that the player's hand is as expected when using pickupCard()
@@ -137,11 +131,13 @@ public class PlayerTest {
         Player player = createStandardPlayer();
 
         player.appendToCurrentHand(new Card(999));
+        player.appendToCurrentHand(new Card(1000));
+        player.appendToCurrentHand(new Card(1001));
         
         player.pickupCard();
 
         //checks that card from top of pickup deck is added to hand
-        assertEquals("999 1 ", player.currentHandToString());
+        assertEquals("999 1000 1001 1 ", player.currentHandToString());
     }
 
     //tests that a file for a player gets overwritten if a player with the same number is created

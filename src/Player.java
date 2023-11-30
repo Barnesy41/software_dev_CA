@@ -106,6 +106,7 @@ public class Player extends Thread {
      */
     public void pickupCard() {
 
+        System.out.println(pickupDeck);
         Card newCard = pickupDeck.popHead();
         this.appendToCurrentHand(newCard);
 
@@ -177,6 +178,8 @@ public class Player extends Thread {
      * @return the player's current hand in string format
      */
     public String currentHandToString(){
+
+        System.out.println(currentHand);
         String currentHandAsString = "";
         for(Card card : currentHand){
             currentHandAsString += card.getValue() + " ";
