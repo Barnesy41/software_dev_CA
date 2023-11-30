@@ -48,9 +48,6 @@ public class Player extends Thread {
      * Allows for the game to be multi-threadded.
      */
     public void run(){
-        this.writeLineToOutputFile("player " + playerNum +
-                                    " initial hand " + currentHandToString()
-        );
 
         while(!Thread.interrupted()){
             boolean hasWon = this.checkWin();

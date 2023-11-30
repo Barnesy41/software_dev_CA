@@ -387,7 +387,11 @@ public class CardGameTest {
                 thread.interrupt(); // Ensures the thread is interrupted
             }
 
-            int winnerPlayerNum = 1;
+
+        //Gets the output of the game from each player
+        ArrayList<String> playerOutputs = new ArrayList<>();
+
+        int winnerPlayerNum = 1;
 
             //Gets the output of the game from each player
             for (int i = 1; i <= 32; i++) { //checks each player output
@@ -397,15 +401,22 @@ public class CardGameTest {
 
                 // Read each line, and append it to the list.
                 String playerOutput = "";
+                Integer lineCounter = 0;
                 while (reader.hasNextLine()) {
                     playerOutput += "\n" + reader.nextLine();
+                    lineCounter++;
                 }
 
                 //checks if the current player is a winner (if they have a complete hand)
                 if (playerOutput.contains("player " + i + " wins")) {
                     winnerPlayerNum = i;
                 }
+                else { //if not winner, each file should have 4 lines
+                    assertEquals(Integer.valueOf(4), lineCounter);
+                }
+
                 reader.close();
+                playerOutputs.add(playerOutput);
             }
 
             assertEquals(32, winnerPlayerNum); //player 1 should always win

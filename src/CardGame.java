@@ -8,7 +8,7 @@ public class CardGame {
     private Pack pack;
     private static ArrayList<Thread> playerThreadArray;
 
-    public CardGame(){
+    public CardGame() {
         playerThreadArray = new ArrayList<Thread>();
         Scanner scanner = new Scanner(System.in); //used for reading inputs
 
@@ -63,6 +63,8 @@ public class CardGame {
         //Ensures game does not start running if player starts with winning hand
         Boolean gameWon = false;
         for(Player player : playerArray) {
+            // Outout initial hand to player output files
+        player.writeLineToOutputFile("player " + player.getPlayerNum() + " initial hand " + player.currentHandToString());
             if (player.checkWin()) {
                 CardGame.setWin(player);
                 gameWon = true;
